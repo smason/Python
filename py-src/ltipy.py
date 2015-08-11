@@ -51,7 +51,7 @@ def km_from_string(s=''):
         km = KernelManager(connection_file = fullpath)
         km.load_connection_file()
         km.start_channels()
-        send = km.shell_channel.execute
+        send = km.shell_channel.execute # not sure if this should be changed as well
 
         respond(None, "python.client.error.ipython-version", None)
         return
@@ -71,7 +71,7 @@ def km_from_string(s=''):
     km.load_connection_file()
     kc = km.client()
     kc.start_channels()
-    send = kc.shell_channel.execute
+    send = kc.execute
     return km
 
 def _extract_traceback(traceback):
