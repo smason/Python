@@ -40,18 +40,6 @@ class Printer():
   def read(self):
     return None
 
-def asUnicode(s):
-  try:
-    return unicode(s)
-  except:
-    return str(s)
-
-def ensureUtf(s):
-  if type(s) == unicode:
-    return s.encode('utf8', 'ignore')
-  else:
-    return str(s)
-
 def findLoc(body, line, total):
   for i in range(len(body)):
     if body[i].lineno == line:
@@ -190,11 +178,11 @@ def handleEval(data):
       loc = form[0]
       isEval = False
       try:
-        code= compile(ensureUtf(code), ensureUtf(data[2]["name"]), 'eval')
+        code= compile(code, str(data[2]["name"]), 'eval')
         isEval = True
       except:
         try:
-          code= compile(ensureUtf(code), ensureUtf(data[2]["name"]), 'exec')
+          code= compile(code, str(data[2]["name"]), 'exec')
         except:
           e = traceback.format_exc()
           send(data[0], "editor.eval.python.exception", {"ex": cleanTrace(e), "meta": loc})
@@ -203,7 +191,7 @@ def handleEval(data):
       try:
         if isEval:
           result = eval(code, module.__dict__)
-          send(data[0], "editor.eval.python.result", {"meta": loc, "result": asUnicode(result)})
+          send(data[0], "editor.eval.python.result", {"meta": loc, "result": str(result)})
         else:
           exec(code, module.__dict__)
           send(data[0], "editor.eval.python.success", {"meta": loc})
@@ -260,11 +248,11 @@ def ipyEval(data):
       loc = form[0]
       isEval = False
       try:
-        compile(ensureUtf(code), ensureUtf(data[2]["name"]), 'eval')
+        compile(code, str(data[2]["name"]), 'eval')
         isEval = True
       except:
         try:
-          compile(ensureUtf(code), ensureUtf(data[2]["name"]), 'exec')
+          compile(code, str(data[2]["name"]), 'exec')
         except:
           e = traceback.format_exc()
           send(data[0], "editor.eval.python.exception", {"ex": cleanTrace(e), "meta": loc})
